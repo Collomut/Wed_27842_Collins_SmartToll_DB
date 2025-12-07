@@ -1,107 +1,110 @@
-Phase III 
-Logical Database Design
-Data Dictionary
+# 🛣️ Smart Toll & Traffic Monitoring System  
+**Project Owner:** Mutinda Collins Mumo  
+**ID Number:** 27842  
+**Institution:** University of Rwanda  
 
-Below is the structured data dictionary covering all entities:
+## Phase III: Logical Database Design  
+### 📚 Data Dictionary
 
-Vehicles Table ;
-vehicle_id — NUMBER — PK — Unique vehicle identifier
-plate_number — VARCHAR2(20) — UNIQUE — Official license plate
-owner_name — VARCHAR2(100) — NOT NULL — Registered owner
-vehicle_type_id — NUMBER — FK → Vehicle_Type.vehicle_type_id
-registration_date — DATE — Vehicle registration date
+The following structured data dictionary covers all entities in the system:
 
- Toll_Gates;
-gate_id — NUMBER — PK
-location — NUMBER
-road_name — VARCHAR2(100)
-lane_count — NUMBER
+---
 
- Toll_Logs;
-log_id — NUMBER — PK
-vehicle_id — NUMBER — FK → Vehicles.vehicle_id
-gate_id — NUMBER — FK → Toll_Gates.gate_id
-entry_time — TIMESTAMP
-exit_time — TIMESTAMP
-payment_status — VARCHAR2(20)
+### **Vehicles Table**
+| Column | Data Type | Key / Constraint | Description |
+|--------|-----------|-----------------|-------------|
+| vehicle_id | NUMBER | PK | Unique vehicle identifier |
+| plate_number | VARCHAR2(20) | UNIQUE | Official license plate |
+| owner_name | VARCHAR2(100) | NOT NULL | Registered owner |
+| vehicle_type_id | NUMBER | FK → Vehicle_Type.vehicle_type_id | Vehicle type reference |
+| registration_date | DATE |  | Vehicle registration date |
 
- Vehicle_Fines;
-fine_id — NUMBER — PK
-vehicle_id — NUMBER — FK → Vehicles.vehicle_id
-violation_type_id — NUMBER — FK → Violation_Type.violation_type_id
-fine_amount — NUMBER
-violation_date — DATE
-fine_status — VARCHAR2(20)
+---
 
-Payments;
-payment_id — NUMBER — PK
-vehicle_id — NUMBER — FK → Vehicles.vehicle_id
-log_id — NUMBER — FK → Toll_Logs.log_id
-payment_method_id — NUMBER — FK → Payment_Method.payment_method_id
-amount — NUMBER
-payment_date — DATE
-reference_no — VARCHAR2(50) UNIQUE
+### **Toll_Gates Table**
+| Column | Data Type | Key / Constraint | Description |
+|--------|-----------|-----------------|-------------|
+| gate_id | NUMBER | PK | Unique toll gate identifier |
+| location | NUMBER |  | Geographic location ID |
+| road_name | VARCHAR2(100) |  | Road where gate is located |
+| lane_count | NUMBER |  | Number of lanes at the gate |
 
-BI Considerations
-To support the analytical requirements of the Smart Toll & Traffic Monitoring System specifically peak-hour analysis, revenue reporting, and enforcement tracking the database utilizes a Dimensional Model (Star Schema). This structure optimizes query performance for reporting rather than transaction processing.
+---
 
-Fact Tables (Metrics)
+### **Toll_Logs Table**
+| Column | Data Type | Key / Constraint | Description |
+|--------|-----------|-----------------|-------------|
+| log_id | NUMBER | PK | Unique log record |
+| vehicle_id | NUMBER | FK → Vehicles.vehicle_id | Vehicle reference |
+| gate_id | NUMBER | FK → Toll_Gates.gate_id | Toll gate reference |
+| entry_time | TIMESTAMP |  | Timestamp of entry |
+| exit_time | TIMESTAMP |  | Timestamp of exit |
+| payment_status | VARCHAR2(20) |  | Payment completion status |
 
-1.FACT_TOLL_PASSAGE: The primary transactional fact table recording every vehicle passage.Records  one row per vehicle passage event.
-Metrics: Toll_Amount, Passage_Duration_Seconds, Vehicle_Count.
-Foreign Keys: Links to DIM_DATE, DIM_TIME, DIM_GATE, DIM_VEHICLE.
+---
 
+### **Vehicle_Fines Table**
+| Column | Data Type | Key / Constraint | Description |
+|--------|-----------|-----------------|-------------|
+| fine_id | NUMBER | PK | Unique fine identifier |
+| vehicle_id | NUMBER | FK → Vehicles.vehicle_id | Vehicle reference |
+| violation_type_id | NUMBER | FK → Violation_Type.violation_type_id | Violation type |
+| fine_amount | NUMBER |  | Fine amount |
+| violation_date | DATE |  | Date of violation |
+| fine_status | VARCHAR2(20) |  | Paid / Pending |
 
-2.FACT_VIOLATION_INCIDENT: A secondary fact table dedicated to enforcement analysis.Records one row per issued fine.
-Metrics: Fine_Amount, Violation_Count.
+---
 
-Dimension Tables (Context)
+### **Payments Table**
+| Column | Data Type | Key / Constraint | Description |
+|--------|-----------|-----------------|-------------|
+| payment_id | NUMBER | PK | Unique payment identifier |
+| vehicle_id | NUMBER | FK → Vehicles.vehicle_id | Vehicle reference |
+| log_id | NUMBER | FK → Toll_Logs.log_id | Toll log reference |
+| payment_method_id | NUMBER | FK → Payment_Method.payment_method_id | Payment method |
+| amount | NUMBER |  | Amount paid |
+| payment_date | DATE |  | Payment timestamp |
+| reference_no | VARCHAR2(50) | UNIQUE | Payment reference number |
 
-1.DIM_VEHICLE: Stores descriptive attributes such as License Plate, Vehicle Class  and Owner Type.
-2.DIM_TOLL_GATE: Describes gate infrastructure, including Location Name, Region, and Number of Lanes.
-3.DIM_PAYMENT_METHOD: Categorizes transactions by type .
-4.DIM_VIOLATION_TYPE: Standardizes enforcement codes .
-5.DIM_DATE & DIM_TIME : Derived temporal dimensions that enable granular analysis. DIM_TIME includes specific flags such as Is_Peak_Hour to support traffic congestion reporting.
+---
 
- Strategy for Slowly Changing Dimensions (SCD)
-To maintain accurate historical reporting, the system implements Slowly Changing Dimensions  for critical entities where attributes change over time.
-Scenario: If a Toll Gate updates its tariff or a vehicle changes ownership, historical reports must still reflect the original price or owner at the time of the transaction.
+## 📊 BI Considerations
 
-- The DIM_TOLL_GATE and DIM_VEHICLE tables include three audit columns:
+The database supports **analytical reporting** using a **Dimensional Model (Star Schema)** to optimize query performance for reporting rather than transactions.
 
+### Fact Tables
+1. **FACT_TOLL_PASSAGE** – Records each vehicle passage.  
+   - Metrics: Toll_Amount, Passage_Duration_Seconds, Vehicle_Count  
+   - FKs: DIM_DATE, DIM_TIME, DIM_GATE, DIM_VEHICLE  
 
-Valid_From_Date: The start date of the attribute's validity.
-Valid_To_Date: The end date (NULL for current records).
-Is_Current_Flag: A boolean indicator (1 for active, 0 for history).
+2. **FACT_VIOLATION_INCIDENT** – Records each issued fine.  
+   - Metrics: Fine_Amount, Violation_Count  
 
+### Dimension Tables
+- **DIM_VEHICLE:** License Plate, Vehicle Class, Owner Type  
+- **DIM_TOLL_GATE:** Gate Location, Region, Number of Lanes  
+- **DIM_PAYMENT_METHOD:** Categorizes transaction types  
+- **DIM_VIOLATION_TYPE:** Standardized enforcement codes  
+- **DIM_DATE & DIM_TIME:** Temporal dimensions; DIM_TIME includes `Is_Peak_Hour` for traffic analysis  
 
- This ensures that revenue reports from previous years remain accurate even if pricing structures change today.
+---
 
- Aggregation Levels & Performance
+### 🕒 Slowly Changing Dimensions (SCD)
 
-To ensure dashboard responsiveness for high-volume data, the BI layer utilizes pre-aggregated summary tables at two distinct stages:
+Critical entities maintain **historical accuracy**:  
 
-- Hourly Gate Performance: Aggregated by Date, Hour, and Gate ID.
-This Supports the Peak-hour traffic analysis dashboard, allowing managers to visualize congestion trends without querying millions of raw passage logs.
--Monthly Revenue Summary: Aggregated by Month and Payment Method.
- Supports Revenue & Violation Reports for executive decision-making, providing instant access to financial totals.
+- **DIM_TOLL_GATE** & **DIM_VEHICLE** include audit columns:  
+  - `Valid_From_Date` – Start of attribute validity  
+  - `Valid_To_Date` – End of attribute validity (NULL for current)  
+  - `Is_Current_Flag` – 1 for current, 0 for historical  
 
-Audit Trails 
-To ensure accountability and trace the origin of every record, a strict auditing policy is applied to the data warehousing process.
+This ensures reports reflect historical prices or ownership accurately.  
 
-ETL Audit Columns: Every table in the BI layer includes standard lineage columns:
-Source_System_ID: Identifies the origin.
-Load_Timestamp: The exact time the record was committed to the warehouse.
-ETL_Batch_ID: Links the record to a specific data load execution log.
+---
 
-Control Table (ETL_JOB_LOG): A centralized table tracks the success or failure of data load jobs, ensuring that any "Read failures" or system errors are flagged for IT review before impacting reports.
+### ⚡ Aggregation Levels & Performance
 
+Pre-aggregated tables improve **dashboard responsiveness**:
 
-Assumptions
-
-• Each vehicle can pass multiple gates per day.
-• A toll log may exist before a payment is completed.
-• A payment always corresponds to one toll log.
-• Gate locations follow a hierarchical geographic structure.
-• Fine types are predefined and controlled by authorities.
-
+- **Hourly Gate Performance:** Aggregated by Date, Hour, Gate ID – for peak-hour traffic analysis  
+- **Monthly Revenue Summary:** Aggregated by Month, Payment Method – for financial repor
