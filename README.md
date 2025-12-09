@@ -6,7 +6,7 @@
 
 **Institution:** Adventist University of Central Africa (AUCA)
 
-**Academic Year:** 2025 – 2026
+**Academic Year:** 2025 
 
 **Database Name:** WED_27842_Collins_smarttoll_db
 
@@ -73,13 +73,11 @@ This project solves these by providing a secure, automated, analytics-ready toll
 The system follows a three-layer architecture:
 
 ### 1. User Layer
-
 * Toll officers
 * Administrators
 * Enforcement teams
 
 ### 2. Business Logic Layer (PL/SQL)
-
 * Functions
 * Procedures
 * `toll_pkg` package
@@ -88,7 +86,6 @@ The system follows a three-layer architecture:
 * Exception handling
 
 ### 3. Data Layer (Oracle Database)
-
 * Relational tables
 * Views & analytical views
 * Materialized views
@@ -97,10 +94,56 @@ The system follows a three-layer architecture:
 
 ---
 
-## 🗃️ 6. Database Features Implemented
+## 🚀 6. Quick Start / Installation Instructions
+
+To set up the Smart Toll Management System in your local Oracle environment, follow these steps:
+
+### Prerequisites
+* Oracle Database 19c (Enterprise or Express Edition)
+* Oracle SQL Developer
+* Git
+
+### Installation Steps
+1.  **Clone the Repository:**
+    ```bash
+    git clone [https://github.com/Collomut/Wed_27842_Collins_SmartToll_DB.git](https://github.com/Collomut/Wed_27842_Collins_SmartToll_DB.git)
+    ```
+2.  **Open SQL Developer:**
+    Connect to your Oracle database instance.
+3.  **Run Scripts in Order:**
+    Execute the SQL scripts located in the `database/documentation/` folders. You must run them in the phase order to avoid dependency errors:
+    * **1.** Run `create_tables.sql` (Creates Tables & Constraints)
+    * **2.** Run `insert_data.sql` (Populates Dummy Data)
+    * **3.:** Run `toll_pkg.sql` and other procedure scripts
+    * **4.** Run `create_triggers.sql` (Enables audit triggers)
+    * **5.:** Run `create_views_bi.sql` (Builds Analytical Views)
+
+4.  **Verify Installation:**
+    Run the test script to ensure everything is working:
+    ```sql
+    @database/documentation/phase 6/test_scripts.sql
+    ```
+
+---
+
+## 📂 7. Project Documentation Structure
+
+The project documentation is organized sequentially in the `database/documentation/` folder, covering all 8 phases of the development lifecycle:
+
+* **Phase 1:** Problem Identification & Concept
+* **Phase 2:** Requirements & Analysis
+* **Phase 3:** Database Design (ERD & Schema)
+* **Phase 4:** DDL Scripts (Table Creation)
+* **Phase 5:** PL/SQL Implementation (Triggers & Packages)
+* **Phase 6:** Testing & Validation
+* **Phase 7:** Business Intelligence & Reporting
+* **Phase 8:** Final Deployment & Manuals
+
+---
+
+## 🗃️ 8. Database Features Implemented
 
 ### Core Tables
-
 * `vehicles`
 * `toll_gates`
 * `toll_logs`
@@ -108,26 +151,22 @@ The system follows a three-layer architecture:
 * `payments`
 
 ### Support Tables
-
 * `holidays`
 * `audit_log`
 
 ### PL/SQL Business Logic
-
 * 8+ functions
 * 10+ procedures
 * Main package: `toll_pkg`
 * Custom exceptions
 
 ### Advanced PL/SQL Programming
-
 * Restriction triggers
 * Compound triggers
 * Automated audit logging
 * Complex validation rules
 
 ### Reporting
-
 * Daily traffic reports
 * Revenue summaries
 * Violation statistics
@@ -135,9 +174,9 @@ The system follows a three-layer architecture:
 
 ---
 
-## 🔐 7. Security & Business Rules
+## 🔐 9. Security & Business Rules
 
-* ❌ No INSERT/UPDATE/DELETE allowed on weekends
+* ❌ No INSERT/UPDATE/DELETE allowed on weekdays
 * ❌ No modifications allowed on public holidays
 * ✔ Full audit logging of sensitive operations
 * ❌ Payment records cannot be deleted
@@ -146,10 +185,9 @@ The system follows a three-layer architecture:
 
 ---
 
-## 📊 8. Business Intelligence (BI)
+## 📊 10. Business Intelligence (BI)
 
 ### Analytical Views
-
 * `vw_daily_traffic_summary`
 * `vw_gate_usage`
 * `vw_violation_summary`
@@ -157,11 +195,9 @@ The system follows a three-layer architecture:
 * `vw_revenue_full`
 
 ### Materialized View
-
 * `MV_HOURLY_TRAFFIC_STATS` (hour-based traffic aggregation)
 
 ### BI Features
-
 * Trend analysis
 * Peak-hour detection
 * Revenue forecasting
@@ -170,48 +206,7 @@ The system follows a three-layer architecture:
 
 ---
 
-## 🧠 9. Advanced BI SQL Implementation
-
-### Hourly Traffic Stats (Materialized View)
-
-```sql
-CREATE MATERIALIZED VIEW mv_hourly_traffic_stats
-BUILD IMMEDIATE
-REFRESH COMPLETE ON DEMAND AS
-SELECT
-    tg.location,
-    TO_CHAR(tl.entry_time, 'HH24') AS hour_of_day,
-    COUNT(*) AS vehicle_count
-FROM toll_logs tl
-JOIN toll_gates tg ON tl.gate_id = tg.gate_id
-GROUP BY tg.location, TO_CHAR(tl.entry_time, 'HH24');
-```
-
-### Revenue Forecasting Function
-
-```plsql
-FUNCTION predict_next_month_revenue RETURN NUMBER IS
-    v_current NUMBER;
-    v_prev    NUMBER;
-    v_growth  NUMBER;
-BEGIN
-    v_growth := (v_current - v_prev) / v_prev;
-    RETURN v_current * (1 + v_growth);
-END;
-```
-
-### Executive Dashboard (Power BI)
-
-Includes the following BI modules:
-
-* Financial Revenue Trends
-* Peak Hour Traffic Analysis
-* Gate Utilization Summary
-* High-Risk Vehicle Watchlist
-
----
-
-## 🧪 10. Testing & Validation
+## 🧪 11. Testing & Validation
 
 All system components passed validation:
 
@@ -226,11 +221,11 @@ All system components passed validation:
 | Materialized views      | ✔ Passed |
 | Package operations      | ✔ Passed |
 
-**Test scripts:** `database/scripts/09_test_scripts.sql`
+**Test scripts:** `database/documentation/phase 6/test_scripts.sql`
 
 ---
 
-## 🏁 11. Project Impact & Conclusion
+## 🏁 12. Project Impact & Conclusion
 
 The Smart Toll Management System delivers:
 
@@ -239,3 +234,9 @@ The Smart Toll Management System delivers:
 * Data-driven enforcement strategies
 * Fully auditable transaction logs
 * Real-time executive dashboards for decision-makers
+
+---
+
+## 📚 13. Documentation & Resources
+
+* **📄 Full Project Documentation:** See `database/documentation/` (Phases 1–8)
