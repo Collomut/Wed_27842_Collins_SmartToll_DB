@@ -16,20 +16,21 @@ END;
 
 ##2. Holiday Operations restrictions
 
-create or replace FUNCTION is_operation_allowed
+CREATE OR REPLACE FUNCTION is_operation_allowed
 RETURN BOOLEAN
 IS
     v_today DATE := TRUNC(SYSDATE);
     v_day   VARCHAR2(20);
     v_count NUMBER;
 BEGIN
-
     v_day := TO_CHAR(v_today, 'DY', 'NLS_DATE_LANGUAGE=ENGLISH');
 
-    IF v_day IN ('SAT', 'SUN') THEN
-        RETURN FALSE;
+
+    IF v_day IN ('MON', 'TUE', 'WED', 'THU', 'FRI') THEN
+        RETURN FALSE; 
     END IF;
 
+    
     SELECT COUNT(*) INTO v_count
     FROM holidays
     WHERE holiday_date = v_today;
@@ -38,8 +39,9 @@ BEGIN
         RETURN FALSE;
     END IF;
 
-    RETURN TRUE;
+    RETURN TRUE; 
 END;
+/
 
 ##4.Last gate Used by a vehicle 
 

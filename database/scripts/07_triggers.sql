@@ -1,15 +1,16 @@
 ##Triggers
 
-##1. No deleting on weekends
+##1. No deleting on weekdays
 
-create or replace TRIGGER trg_payments_delete_control
+CREATE OR REPLACE TRIGGER trg_payments_delete_control
 BEFORE DELETE ON payments
 FOR EACH ROW
 BEGIN
     IF is_operation_allowed = FALSE THEN
-        RAISE_APPLICATION_ERROR(-20052, 'DELETE blocked: Weekend/Holiday operations not allowed.');
+        RAISE_APPLICATION_ERROR(-20052, 'DELETE blocked: Operations are not allowed on Weekdays (Mon-Fri).');
     END IF;
 END;
+/
 
 ##2. Recording operations (Compound Trigger)
 
@@ -65,26 +66,28 @@ BEGIN
     END IF;
 END;
 
-##4.Insertion control on weekends
+##4.Insertion control on weekdays
 
-create or replace TRIGGER trg_vehicle_insert_control
+CREATE OR REPLACE TRIGGER trg_vehicle_insert_control
 BEFORE INSERT ON vehicles
 FOR EACH ROW
 BEGIN
     IF is_operation_allowed = FALSE THEN
-        RAISE_APPLICATION_ERROR(-20050, 'INSERT blocked: Weekend/Holiday operations are not allowed.');
+        RAISE_APPLICATION_ERROR(-20050, 'INSERT blocked: Operations are not allowed on Weekdays (Mon-Fri).');
     END IF;
 END;
+/
 
-##5.Vehicle updation on weekends 
+##5.Vehicle updation on weekdays
 
-create or replace TRIGGER trg_vehiclefine_update_control
+CREATE OR REPLACE TRIGGER trg_vehiclefine_update_control
 BEFORE UPDATE ON vehicle_fine
 FOR EACH ROW
 BEGIN
     IF is_operation_allowed = FALSE THEN
-        RAISE_APPLICATION_ERROR(-20051, 'UPDATE blocked: Weekend/Holiday operations not allowed.');
+        RAISE_APPLICATION_ERROR(-20051, 'UPDATE blocked: Operations are not allowed on Weekdays (Mon-Fri).');
     END IF;
 END;
+/
 
 
