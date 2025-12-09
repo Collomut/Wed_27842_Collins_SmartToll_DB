@@ -61,7 +61,7 @@ Using the views above, the following analytical reports can now be generated ins
 ---
 
 ## 3️⃣ Testing & Verification
-**File:** `21_phase8_test.sql`
+
 
 A robust test suite was executed to ensure the views return accurate data:
 

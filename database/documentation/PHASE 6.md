@@ -24,7 +24,7 @@ This approach ensures modularity, security, and ease of maintenance by keeping b
 ---
 
 ## 1️⃣ Package Specification (API Definition)
-**File:** `06_toll_pkg_spec.sql`  
+
 
 The specification defines the public API for the application, exposing:
 * **10+ Business Functions:** including `get_vehicle_balance`, `calculate_toll_fee`, `validate_plate`.
@@ -35,7 +35,7 @@ The specification defines the public API for the application, exposing:
 ---
 
 ## 2️⃣ Package Body (Logic Implementation)
-**File:** `07_toll_pkg_body.sql`  
+
 
 This file contains the compiled executable logic. Key implementations include:
 * **Fine Management:** Logic to Add, Pay, and Settle fines, ensuring `VEHICLE_FINE` and `PAYMENTS` tables stay synchronized.
@@ -48,8 +48,8 @@ This file contains the compiled executable logic. Key implementations include:
 
 ---
 
-## 3️⃣ Advanced Reporting (Cursors)
-**File:** `08_cursors.sql`  
+## 3️⃣ Advanced Reporting 
+
 
 Iterative reporting logic implemented via cursors:
 * **Cursor A (High-Risk Reporting):** `Top Unpaid Vehicles`
@@ -60,7 +60,7 @@ Iterative reporting logic implemented via cursors:
 ---
 
 ## 4️⃣ Analytics (Window Functions)
-**File:** `09_window_functions.sql`  
+
 
 SQL-based analytics for complex data questions:
 * **`RANK()`**: Used to rank vehicles by total violation count to identify habitual offenders.
@@ -70,7 +70,7 @@ SQL-based analytics for complex data questions:
 ---
 
 ## 5️⃣ Testing & Verification
-**File:** `10_test_plsql.sql`  
+
 
 A comprehensive test suite executed to validate the package:
 * **Unit Tests:** Validated individual functions like `get_vehicle_profile`.
