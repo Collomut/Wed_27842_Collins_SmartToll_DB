@@ -11,9 +11,8 @@ The system automates high-volume toll operations while ensuring **accuracy, acco
 
 ---
 
-🖼️ Business Process Model (BPMN)
-Visual representation of the Toll Gate Workflow.
-located in Screenshots/workflow_analysys/
+## 🖼️ Business Process Model (BPMN)
+![alt text](image.png)
 
 ---
 
@@ -42,7 +41,7 @@ located in Screenshots/workflow_analysys/
 
 - **Pending fines** – System blocks driver; enforcement issues fine or requests payment.  
 - **Payment failure** – Transaction retried; barrier remains closed.  
-- **Read failure** – Vehicle directed to a manual lane; logged as a sensor error.  
+- **Read failure** – Vehicle directed to a manual lane; logged into **SYSTEM_ERROR_LOGS** for technical review.  
 - **Emergency overrides** – Admin may allow vehicles with special permissions.  
 
 ---
@@ -59,13 +58,6 @@ located in Screenshots/workflow_analysys/
 
 ## 📊 BI Opportunities
 
-- **Peak-hour traffic analysis**  
-- **Daily, weekly, monthly revenue analysis**  
-- **Fine enforcement rate tracking**  
-- **Lane performance and throughput monitoring**  
-- **Sensor error detection**  
-- **Predictive congestion and maintenance insights**  
+- **Peak-hour traffic analysis** - **Daily, weekly, monthly revenue analysis** - **Fine enforcement rate tracking** - **Lane performance and throughput monitoring** - **Sensor error detection** - **Predictive congestion and maintenance insights** ---
 
----
-
-This business process ensures **accurate revenue collection**, **reduced congestion**, **proper enforcement**, and **strong analytical support** for government planning.
+*This business process ensures accurate revenue collection, reduced congestion, proper enforcement, and strong analytical support for government planning.*
